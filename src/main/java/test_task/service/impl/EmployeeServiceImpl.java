@@ -6,6 +6,8 @@ import test_task.dao.EmployeeDao;
 import test_task.model.Employee;
 import test_task.service.EmployeeService;
 
+import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -35,11 +37,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //TODO Implement method using Collection
         // ---write your code here
-
-
+        Long id = 0L;
+        Iterator<Employee> iterator = employees.iterator();
+        while (iterator.hasNext()) {
+            Employee employee = iterator.next();
+            if (name.equals(employee.getName())) {
+                id = employee.getId();
+                iterator.remove();
+                employeeDao.deleteById(id);
+            }
+        }
 
         employeeDao.saveAll(employees);
-        return 0L;
+        return id;
     }
 
     @Override
@@ -48,19 +58,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //TODO Implement method using Collection
         // ---write your code here
-
-
+        Long id = 0L;
+        for (Employee employee : employees) {
+            if (name.equals(employee.getName())) {
+                employee.setSalary(employee.getSalary().multiply(new BigDecimal(2)));
+                id = employee.getId();
+            }
+        }
 
         employeeDao.saveAll(employees);
-        return 0L;
+        return id;
     }
 
     @Override
     public Long hireEmployee(Employee employee) {
         //TODO Implement method using Collection and DAO
         // ---write your code here
-
-
-        return 0L;
+        return employeeDao.save(employee).getId();
     }
 }
